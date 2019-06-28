@@ -18,11 +18,28 @@ import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {MatButtonModule, MatIconModule} from '@angular/material';
+import {FuseModule} from '@fuse/fuse.module';
+import {fuseConfig} from './fuse-config';
+import {FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule} from '@fuse/components';
+import {FuseSharedModule} from '@fuse/shared.module';
+import {SampleModule} from './main/sample/sample.module';
+import {RouterModule, Routes} from '@angular/router';
+import {LayoutModule} from './layout/layout.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+const appRoutes: Routes = [
+  {
+    path      : '**',
+    redirectTo: 'sample'
+  }
+];
 
 @NgModule({
   declarations: [
@@ -32,8 +49,13 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+
+    RouterModule.forRoot(appRoutes),
+    TranslateModule.forRoot(),
+    /*
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
@@ -41,7 +63,26 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: (HttpLoaderFactory),
         deps: [HttpClient]
       }
-    })
+    }),
+     */
+
+    // Material moment date module
+    MatMomentDateModule,
+
+    // Material
+    MatButtonModule,
+    MatIconModule,
+
+    // Fuse modules
+    FuseModule.forRoot(fuseConfig),
+    FuseProgressBarModule,
+    FuseSharedModule,
+    FuseSidebarModule,
+    FuseThemeOptionsModule,
+
+    // App modules
+    LayoutModule,
+    SampleModule
   ],
   providers: [ElectronService],
   bootstrap: [AppComponent]
